@@ -10,6 +10,8 @@ import Register from './pages/Register/Register';
 //Cấu hình redux
 import { Provider } from 'react-redux';
 import { store } from "./redux/configStore"
+import UserTemplate from './templates/UserTemplate';
+import ResponsiveItem from './component/ResponsiveItem';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -24,6 +26,13 @@ root.render(
           </Route>
           <Route path='login' element={<Login />}></Route>
           <Route path='register' element={<Register />}></Route>
+          <Route path='*' element={<Navigate to="" />}></Route>
+        </Route>
+        <Route path='user' element={<UserTemplate />}>
+          <Route index element={<ResponsiveItem component={<Login />}
+            mobileComponent={<div>Login</div>} />}></Route>
+          <Route path='login' element={<Login />}></Route>
+          <Route path='register' element={<Login />}></Route>
           <Route path='*' element={<Navigate to="" />}></Route>
         </Route>
       </Routes>

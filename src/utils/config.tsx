@@ -13,7 +13,7 @@ export const settings = {
     setStorage: (name: string, data: string): void => {
         localStorage.setItem(name, data);
     },
-    getStorageJson: (name: string): string | undefined => {
+    getStorageJson: (name: string): any | undefined => {
         if (localStorage.getItem(name)) {
             const dataStore: string | undefined | null = localStorage.getItem(name);
             if (typeof dataStore == 'string') {

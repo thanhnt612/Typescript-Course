@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { http } from '../../utils/config';
 import { DispatchType } from '../configStore';
 
@@ -72,8 +72,11 @@ const productReducer = createSlice({
             state.productDetail = action.payload;
         }
     },
-    extraReducers: {
-
+    extraReducers: (builder) => {
+        builder.addCase(getProductDetailApi.fulfilled,
+            (state: ProductState, action: PayloadAction<ProductDetail>) => {
+                state.productDetail = action.payload
+            })
     }
 });
 
@@ -93,12 +96,20 @@ export const getProductApi = () => {
     }
 }
 
-export const getProductDetailApi = (id: string) => {
-    return async (dispatch: DispatchType) => {
-        const result: any = await http.get('api/product/getbyid?id=' + id);
-        let prodDetail: ProductDetail = result.data.content;
-        //Đưa lên action payload
-        const action: PayloadAction<ProductDetail> = setProductDetailAction(prodDetail)
-        dispatch(action)
+// export const getProductDetailApi = (id: string) => {
+//     return async (dispatch: DispatchType) => {
+//         const result: any = await http.get('api/product/getbyid?id=' + id);
+//         let prodDetail: ProductDetail = result.data.content;
+//         //Đưa lên action payload
+//         const action: PayloadAction<ProductDetail> = setProductDetailAction(prodDetail)
+//         dispatch(action)
+//     }
+// }
+//----------------------Create Async Thunk----------------------
+export const getProductDetailApi = createAsyncThunk(
+    'product/getById',
+    async (id: string) => {
+        const result = await http.get('api/product/getbyid?id=' + id);
+        return (result.data.content) as ProductDetail
     }
-}
+)
